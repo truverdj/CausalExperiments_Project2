@@ -1,0 +1,32 @@
+---
+title: "STA 522 Project 2"
+author: "Arpita Mandan, Daniel Truver"
+date: "4/19/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(dplyr)
+```
+
+```{r, echo=FALSE}
+# setup the data matrix
+# 1 = high (treatment setting), 0 = low (control) setting
+obs = data.frame(
+  Rotor_Length = rep(c(rep(0,4), rep(1,4)), 8),
+  Leg_Length = rep(c(rep(0,8), rep(1,8)), 4),
+  Leg_Width = rep(c(rep(0,16), rep(1,16)), 2),
+  Paper_Clip = c(rep(0,32), rep(1,32)),
+  time = NA
+)
+DanielData = obs %>% filter(Paper_Clip == 1)
+set.seed(2018)
+DropOrder = sample_n(DanielData, 32)
+DanielData[as.numeric(rownames(DropOrder)),"time"] = 
+  c(1.27,1.45,0.85,1.44,1.56,1.18,1.37,0.95,1.04,1.32,1.26,1.02,1.19,0.92,1.14,0.92,
+    1.35,1.16,0.87,0.95,1.05,1.56,1.22,0.92,1.10,1.26,1.17,1.10,1.10,1.10,1.58,0.94)
+save(DanielData, file = "daniel-drop-data.Rdata")
+obs[33:64,"time"] = DanielData$time
+save(obs, file = "full-data.Rdata")
+```
