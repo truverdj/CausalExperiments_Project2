@@ -10,7 +10,13 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(dplyr)
 ```
 
-```{r, echo=FALSE}
+#### Experimental Design
+
+We decided to use a full factorial design so that we can estimate any interaction we want from the data. Dropping paper helicopters does not take a long time; $2^4$ configurations was a reasonable drain on our resources (time). We dropped each helicopter configuration four times in a random order. 
+
+#### The Data Collection Part
+
+```{r}
 # setup the data matrix
 # 1 = high (treatment setting), 0 = low (control) setting
 obs = data.frame(
@@ -30,3 +36,6 @@ save(DanielData, file = "daniel-drop-data.Rdata")
 obs[33:64,"time"] = DanielData$time
 save(obs, file = "full-data.Rdata")
 ```
+
+#### The Analysis 
+
