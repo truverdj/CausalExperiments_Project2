@@ -46,3 +46,12 @@ save(obs, file = "full-data.Rdata")
 
 #### The Analysis 
 
+```{r}
+load("full-data.Rdata")
+effects = lm(time ~ Rotor_Length + Leg_Length + Leg_Width + Paper_Clip +
+               Rotor_Length:Leg_Length + Rotor_Length:Leg_Width + Rotor_Length:Paper_Clip +
+               Leg_Length:Leg_Width + Leg_Length:Paper_Clip + 
+               Leg_Width:Paper_Clip,
+             data = obs)
+summary(effects)
+```
