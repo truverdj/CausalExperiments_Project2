@@ -17,7 +17,8 @@ We decided to use a full factorial design so that we can estimate any interactio
 #### The Data Collection Part
 
 ```{r}
-# setup the data matrix
+if(!file.exists("full-data.Rdata")){
+  # setup the data matrix
 # 1 = high (treatment setting), 0 = low (control) setting
 obs = data.frame(
   Rotor_Length = rep(c(rep(0,4), rep(1,4)), 8),
@@ -40,6 +41,7 @@ no_legclip_time = c(1, 1.22, 0.98, 1.12, 1.41, 1.37, 1.52, 1.45, 1.25, 1.18, 1.3
 obs[1:32, "time"] = no_legclip_time
 
 save(obs, file = "full-data.Rdata")
+}
 ```
 
 #### The Analysis 
