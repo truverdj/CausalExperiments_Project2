@@ -12,7 +12,7 @@ library(dplyr)
 
 #### Experimental Design
 
-We decided to use a full factorial design so that we can estimate any interaction we want from the data. Dropping paper helicopters does not take a long time; $2^4$ configurations was a reasonable drain on our resources (time). We dropped each helicopter configuration four times in a random order. 
+We decided to use a full factorial design so that we can estimate any interaction we want from the data. Dropping paper helicopters does not take a long time; $2^4$ configurations was a reasonable drain on our resources (time). We dropped each helicopter configuration four times in a random order from a height of five feet.
 
 #### The Data Collection Part
 
@@ -37,7 +37,9 @@ save(DanielData, file = "daniel-drop-data.Rdata")
 obs[33:64,"time"] = DanielData$time
 #save(obs, file = "full-data.Rdata")
 
-no_legclip_time = c(1, 1.22, 0.98, 1.12, 1.41, 1.37, 1.52, 1.45, 1.25, 1.18, 1.39, 1.28, 1.58, 1.62, 1.49, 1.64, 1.14, 1.21, 1.16, 1.23, 1.21, 1.19, 1.16, 1.18, 1.15, 1.28, 1.29, 1.31, 1.18, 1.24, 1.17, 1.09)
+no_legclip_time = c(1, 1.22, 0.98, 1.12, 1.41, 1.37, 1.52, 1.45, 1.25, 1.18, 
+1.39, 1.28, 1.58, 1.62, 1.49, 1.64, 1.14, 1.21, 1.16, 1.23, 1.21, 1.19, 1.16,
+1.18, 1.15, 1.28, 1.29, 1.31, 1.18, 1.24, 1.17, 1.09)
 obs[1:32, "time"] = no_legclip_time
 
 save(obs, file = "full-data.Rdata")
@@ -57,6 +59,28 @@ summary(effects)
 ```
 
 #### Question 1
+
+From the coefficients and standard errors of our linear model, we find that 
+the most important factors for longer flight are rotor length, leg length, 
+leg width, rotor length - leg length interaction, rotor length - leg width 
+interaction, and leg length - leg width interaction. The standard errors for
+these estimates are small compared to the respective estimates which is why we
+think their effects on the flight time (the response variable) are significant.
+
+```{r, echo = FALSE}
+cf = coef(effects)
+ci = confint(effects)
+
+imp_fac = c("Rotor_Length", "Leg_Length", "Leg_Width", "Rotor_Length:Leg_Length",
+            "Rotor_Length:Leg_Width", "Leg_Length:Leg_Width")
+
+table1 = data.frame(lwr = ci[imp_fac, 1],
+                    fit = cf[imp_fac],
+                    upr = ci[imp_fac, 2]) %>% round(.,3)
+
+knitr::kable(table1, col.names = c("2.5%", "Estimate", "97.5%"),
+             caption = "Effects of important factors on flight time")
+```
 
 #### Question 2
 
