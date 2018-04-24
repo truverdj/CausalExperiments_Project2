@@ -55,3 +55,39 @@ effects = lm(time ~ Rotor_Length + Leg_Length + Leg_Width + Paper_Clip +
              data = obs)
 summary(effects)
 ```
+
+#### Question 1
+
+#### Question 2
+
+There is evidence that the effect of rotor length differs by leg width. When leg width is in the low setting, rotor length has the following effects on flight time.
+
+```{r, echo=FALSE}
+cf = coef(effects)
+ci = confint(effects)
+table2 = data.frame(lwr = ci["Rotor_Length",1],
+                    fit = cf["Rotor_Length"],
+                    upr = ci["Rotor_Length",2])
+knitr::kable(table2, col.names = c("2.5%", "Estimate", "97.5%"),
+             caption = "Effects of Rotor Length with Leg Width at Low Setting",
+             row.names = FALSE)
+```
+
+When leg width is in the high setting, the effect of rotor length changes as indicated by the interaction term. 
+
+```{r, echo=FALSE}
+table2 = data.frame(lwr = ci["Rotor_Length:Leg_Width",1],
+                    fit = cf["Rotor_Length:Leg_Width"],
+                    upr = ci["Rotor_Length:Leg_Width",2])
+knitr::kable(table2, col.names = c("2.5%", "Fit", "97.5%"),
+             caption = "Change in Rotor Length Effect when Leg Width is High")
+```
+
+```{r, echo=FALSE}
+table2 = data.frame(low = cf["Rotor_Length"], 
+                    high = cf["Rotor_Length:Leg_Width"] +  cf["Rotor_Length"])
+knitr::kable(table2, col.names = c("With Low Leg Width", "With High Leg Width"),
+             caption = "Effects of Rotor Lenght on Flight Time")
+```
+
+#### Question 3
