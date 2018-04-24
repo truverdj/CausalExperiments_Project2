@@ -67,7 +67,8 @@ cf = coef(effects)
 ci = confint(effects)
 table2 = data.frame(lwr = ci["Rotor_Length",1],
                     fit = cf["Rotor_Length"],
-                    upr = ci["Rotor_Length",2])
+                    upr = ci["Rotor_Length",2]) %>%
+  round(.,3)
 knitr::kable(table2, col.names = c("2.5%", "Estimate", "97.5%"),
              caption = "Effects of Rotor Length with Leg Width at Low Setting",
              row.names = FALSE)
@@ -78,16 +79,35 @@ When leg width is in the high setting, the effect of rotor length changes as ind
 ```{r, echo=FALSE}
 table2 = data.frame(lwr = ci["Rotor_Length:Leg_Width",1],
                     fit = cf["Rotor_Length:Leg_Width"],
-                    upr = ci["Rotor_Length:Leg_Width",2])
+                    upr = ci["Rotor_Length:Leg_Width",2]) %>%
+  round(.,3)
 knitr::kable(table2, col.names = c("2.5%", "Fit", "97.5%"),
-             caption = "Change in Rotor Length Effect when Leg Width is High")
+             caption = "Change in Rotor Length Effect when Leg Width is High",
+             row.names = FALSE)
 ```
 
 ```{r, echo=FALSE}
 table2 = data.frame(low = cf["Rotor_Length"], 
-                    high = cf["Rotor_Length:Leg_Width"] +  cf["Rotor_Length"])
+                    high = cf["Rotor_Length:Leg_Width"] +  cf["Rotor_Length"]) %>%
+  round(.,3)
 knitr::kable(table2, col.names = c("With Low Leg Width", "With High Leg Width"),
-             caption = "Effects of Rotor Lenght on Flight Time")
+             caption = "Effects of Rotor Lenght on Flight Time",
+             row.names = FALSE)
 ```
 
 #### Question 3
+
+In our regression, we have assumed that the three-way and four-way interactions are zero. With that in mind, the optimal combination is to use the high setting on rotor length, the high setting on leg length, the low setting on leg width, and no paper clip. 
+
+```{r, echo=FALSE}
+table3 = obs %>% 
+  select(-time) %>%
+  unique() 
+predTime = predict(effects, newdata = table3)
+table3$pred = round(predTime,2)
+best = table3[which.max(predTime),]
+knitr::kable(table3, col.names = c("Rotor Length", "Leg Length", "Leg Width", "Paper Clip",
+                                   "Predicted Flight Time"),
+             caption = "Predicted Flight Time of Helicopter Based on Configuration",
+             row.names = FALSE)
+```
